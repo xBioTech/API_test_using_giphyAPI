@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+     <img src="#">
+
+     <form action="">
+      <label for="searchbar">
+        <input type="search" id="searchbar" name="searchbar">
+      </label>
+
+      <button class="submit-btn">Get New GIF</button>
+     </form>
+
+  <script>
+    const img = document.querySelector("img");
+    const searchbar = document.getElementById("searchbar");
+    const submitButton = document.querySelector(".submit-btn");
+    // fetches data from the server
+    function fetchGif(e){
+      e.preventDefault();
+    const searchbarValue = searchbar.value;
+    fetch(`https://api.giphy.com/v1/gifs/translate?api_key=EU9OoZWq5w5Yro8zeus7nErn73FU6HoO&s=${searchbarValue}`, {mode: "cors"})
+    //response from server is a promise and not usable as JS Code
+    .then(function(response){
+        if(!response.ok){
+          throw new Error("Network error");
+        }
+        // we return the server response as JS Object using reponse.json(); 
+        return response.json();
+    })
+    // now the server response is a JS object and can be used in the code
+    .then(function(response){
+        console.log(response);
+        console.log(response.data.images.original.url);
+        img.src = response.data.images.original.url;
+    })
+    .catch(function(error){
+      console.log(error.message);
+    });
+  }
+
+  submitButton.addEventListener("click", fetchGif);
+
+
+  </script>
+</body>
+</html>
